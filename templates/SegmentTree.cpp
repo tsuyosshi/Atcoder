@@ -41,7 +41,7 @@ class SegmentTree {
 public:
     // _n:必要サイズ, def:初期値, operation:クエリ関数,
     // _update:更新関数
-    SegTree(size_t _n, T def, function<T(T, T)> operation, function<T(T, T)> update) : def(def), operation(operation), update(update) {
+    SegmentTree(size_t _n, T def, function<T(T, T)> operation, function<T(T, T)> update) : def(def), operation(operation), update(update) {
         n = 1;
         while (n < _n) {
             n *= 2;
@@ -76,5 +76,5 @@ signed main() {
     auto operation = [](int a, int b) { return min(a, b); };
     auto update = [](int data, int x) { return x; };
     SegmentTree<int> seg(N, INF, operation, update);
-    for ()
+    
 }
