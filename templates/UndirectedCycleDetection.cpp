@@ -20,30 +20,31 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-void dfs(int v, int &res, vector<vector<int>> &A, deque<int> &history, vector<bool> &seen, vector<bool> &finished) {
+void dfs(int v, int prev, int &res, vector<vector<int>> &E, deque<int> &history, vector<bool> &seen, vector<bool> &finished) {
     seen[v] = true;
     history.push_back(v);
-    for (auto u: A[v]) {
+    for (auto u: E[v]) {
+        if (u == prev) continue;
         if (finished[u]) continue;
         if (seen[u] && !finished[u]) {
             res = u;
             return;
         }
-        dfs(u, res, A, history, seen, finished);
+        dfs(u, v, res, E, history, seen, finished);
         if (res != -1) return;
     }
     finished[v] = true;
     history.pop_back();
 }
 
-vector<int> cycle_detection(vector<vector<int>> &A) {
-    int n = A.size();
+vector<int> cycle_detection(vector<vector<int>> &E) {
+    int n = E.size();
     vector<bool> seen(n, false), finished(n, false);
     for (int i = 0; i < n; ++i) {
         if (seen[i] && finished[i]) continue;
         deque<int> history;
         int v = -1;
-        dfs(i, v, A, history, seen, finished);
+        dfs(i, -1, v, E, history, seen, finished);
         if (v != -1) {
             vector<int> cycle;
             while (!history.empty()) {
@@ -59,19 +60,22 @@ vector<int> cycle_detection(vector<vector<int>> &A) {
     return vector<int>();
 }
 
-int N;
+int N, M;
 
 signed main() {
-    cin >> N;
-    vector<vector<int>> A(N);
-    for (int i = 0; i < N; ++i) {
-        int v;
-        cin >> v;
-        v--;
-        A[i].push_back(v);
+    cin >> N >> M;
+    vector<vector<int>> E(N);
+    for (int i = 0; i < M; ++i) {
+        int a, b;
+        cin >> a >> b;
+        a--, b--;
+        E[a].push_back(b);
+        E[b].push_back(a);
     }
-    auto ans = cycle_detection(A);
-    cout << ans.size() << endl;
-    for (auto v: ans) cout << v + 1 << " ";
-    cout << endl;
+    auto ans = cycle_detection(E);
+    if (ans.size() > 0) {
+        cout << "No" << endl;
+    } else {
+        cout << "Yes" << endl;
+    }
 }  

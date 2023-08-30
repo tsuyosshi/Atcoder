@@ -62,10 +62,7 @@ bool is_valid_move(int row, int col, vector<string> &F, vector<vector<int>> &obj
 
 }
 
-/*
-https://atcoder.jp/contests/abc317/tasks/abc317_e
-を参考
-*/
+/* https://atcoder.jp/contests/abc317/tasks/abc317_e を参考 */
 
 signed main() {
 
