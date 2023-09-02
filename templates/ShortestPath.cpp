@@ -20,42 +20,51 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-template<typename T>
-struct edge {
-    int to;
-    T cost;
-    edge(int to, T cost) : to(to), cost(cost) {}
-};
-
-template<typename T>
-void dijkstra(int s, T def, T init, vector<vector<edge<T>>> &G, vector<T> &dist, vector<int> &prev) {
+vector<int> bfs(int s, vector<vector<int>> &G){
     int n = G.size();
-    using P = pair<T, int>;
-    priority_queue<P, vector<P>, greater<P>> pq;
-    dist.assign(n, def);
-    prev.assign(n, -1);
-    dist[s] = init;
-    pq.push(P(dist[s], s));
-    while (pq.size()) {
-        P p = pq.top();
+    queue<int> que;
+    vector<int> dist(n, INF);
+    que.push(s);
+    dist[s] = 0;
+    while (que.size() > 0) {
+        int v = que.front();
+        que.pop();
+        for (auto u: G[v]) {
+            if (dist[u] != INF) continue;
+            que.push(u);
+            dist[u] = dist[v] + 1;
+        }  
+    }
+    return dist;
+}
+
+vector<int> dijkstra(int s, vector<vector<PI>> &G) {
+    int n = G.size();
+    priority_queue<PI, vector<PI>, greater<PI>> pq;
+    vector<int> dist(n, INF);
+    dist[s] = 0;
+    pq.emplace(dist[s], s);
+    while (pq.size() > 0) {
+        auto p = pq.top();
         pq.pop();
         int v = p.second;
         if (dist[v] < p.first) continue;
         for (auto e: G[v]) {
-            if (dist[e.to] > dist[v] + e.cost) {
-                dist[e.to] = dist[v] + e.cost;
-                prev[e.to] = v;
-                pq.emplace(dist[e.to], e.to);
+            int u = e.first, cost = e.second;
+            if (dist[u] > dist[v] + cost) {
+                dist[u] = dist[v] + cost;
+                pq.emplace(dist[u], u);
             }
         }
     }
+    return dist;
 }
 
 int N;
 
 signed main() {
     cin >> N;
-    vector<vector<edge<int>>> G(N+1);
+    vector<vector<PI>> G(N+1);
     for (int i = 1; i <= N; ++i) {
         int s;
         cin >> s;
@@ -70,9 +79,7 @@ signed main() {
         cin >> t;
         G[0].emplace_back(i, t);
     }
-    vector<int> dist(N+1);
-    vector<int> prev(N+1);
-    dijkstra<int>(0, INF, 0, G, dist, prev);
+    auto dist = dijkstra(0, G);
     int ans = INF;
     for (int i = 1; i <= N; ++i) cout << dist[i] << endl;
 }
