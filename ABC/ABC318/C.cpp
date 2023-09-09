@@ -20,20 +20,24 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-int N;
+int N, D, P;
 
 signed main() {
-    cin >> N;
-    int ans = 0;
-    map<string, int> mp;
-    for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+    cin >> N >> D >> P;
+    vector<int> F(N);
+    for (int i = 0; i < N; ++i) cin >> F[i];
+    sort(F.begin(), F.end());
+    vector<int> S(N+5, 0);
+    for (int i = 1; i <= N; ++i) S[i] = S[i-1] + F[i-1];
+    int ans = INF;
+    for (int i = 0; i <= 2*N; ++i) {
+        // D * i 枚パスを買う
+        if (D * i >= N) {
+            chmin(ans, P*i);
+        } else {
+            chmin(ans, P*i+S[N-D*i]);
+        }
     }
+    chmin(ans, S[N]);
     cout << ans << endl;
-}  
+}

@@ -21,19 +21,20 @@ template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true;
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
 int N;
+vector<int> A;
 
 signed main() {
     cin >> N;
-    int ans = 0;
-    map<string, int> mp;
-    for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+    A.resize(3 * N);
+    vector<vector<int>> X(N+1);
+    vector<PI> Y;
+    for (int i = 0; i < 3 * N; ++i) {
+        cin >> A[i];
+        X[A[i]].push_back(i);
     }
-    cout << ans << endl;
+    for (int i = 1; i <= N; ++i) Y.push_back(PI(X[i][1], i));
+    sort(Y.begin(), Y.end());
+    for (auto v: Y) cout << v.second << " ";
+    cout << endl;
+
 }  

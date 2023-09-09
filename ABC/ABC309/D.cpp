@@ -20,8 +20,10 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-vector<int> bfs(int s, vector<vector<int>> &G){
-    int n = G.size();
+int N1, N2, M;
+
+vector<int> bfs(int s, vector<vector<int>> &E){
+    int n = E.size();
     queue<int> que;
     vector<int> dist(n, INF);
     que.push(s);
@@ -29,7 +31,7 @@ vector<int> bfs(int s, vector<vector<int>> &G){
     while (que.size() > 0) {
         int v = que.front();
         que.pop();
-        for (auto u: G[v]) {
+        for (auto u: E[v]) {
             if (dist[u] != INF) continue;
             que.push(u);
             dist[u] = dist[v] + 1;
@@ -38,47 +40,27 @@ vector<int> bfs(int s, vector<vector<int>> &G){
     return dist;
 }
 
-vector<int> dijkstra(int s, vector<vector<PI>> &G) {
-    int n = G.size();
-    priority_queue<PI, vector<PI>, greater<PI>> pq;
-    vector<int> dist(n, INF);
-    dist[s] = 0;
-    pq.emplace(dist[s], s);
-    while (pq.size() > 0) {
-        auto p = pq.top();
-        pq.pop();
-        int v = p.second;
-        if (dist[v] < p.first) continue;
-        for (auto e: G[v]) {
-            int u = e.first, cost = e.second;
-            if (dist[u] > dist[v] + cost) {
-                dist[u] = dist[v] + cost;
-                pq.emplace(dist[u], u);
-            }
-        }
-    }
-    return dist;
-}
-
-int N;
-
 signed main() {
-    cin >> N;
-    vector<vector<PI>> G(N+1);
-    for (int i = 1; i <= N; ++i) {
-        int s;
-        cin >> s;
-        if (i != N) {
-            G[i].emplace_back(i+1, s);
+    cin >> N1 >> N2 >> M;
+    vector<vector<int>> E1(N1), E2(N2);
+    for (int i = 0; i < M; ++i) {
+        int u, v;
+        cin >> u >> v;
+        if (u <= N1) {
+            u--, v--;
+            E1[u].push_back(v);
+            E1[v].push_back(u);
         } else {
-            G[i].emplace_back(1, s);
+            u -= N1, v -= N1;
+            u--, v--;
+            E2[u].push_back(v);
+            E2[v].push_back(u);
         }
     }
-    for (int i = 1; i <= N; ++i) {
-        int t;
-        cin >> t;
-        G[0].emplace_back(i, t);
-    }
-    auto dist = dijkstra(0, G);
-    for (int i = 1; i <= N; ++i) cout << dist[i] << endl;
-}
+    auto dist1 = bfs(0, E1);
+    auto dist2 = bfs(N2-1, E2);
+    int ma1 = -INF, ma2 = -INF;
+    for (int i = 0; i < N1; ++i) if (dist1[i] != INF) chmax(ma1, dist1[i]);
+    for (int i = 0; i < N2; ++i) if (dist2[i] != INF) chmax(ma2, dist2[i]);
+    cout << ma1 + ma2 + 1 << endl;
+}  

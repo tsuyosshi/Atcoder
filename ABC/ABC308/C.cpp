@@ -20,20 +20,27 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
+bool comp(const PII& A, const PII& B) {
+    if (A.first*B.second.first > B.first*A.second.first) {
+        return true;
+    } else if (A.first*B.second.first < B.first*A.second.first) {
+        return false;
+    } else {
+        return A.second.second < B.second.second;
+    }
+}
+
 int N;
 
 signed main() {
     cin >> N;
-    int ans = 0;
-    map<string, int> mp;
+    vector<PII> X;
     for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+        int a, b;
+        cin >> a >> b;
+        X.push_back(PII(a, PI(a+b, i)));
     }
-    cout << ans << endl;
+    sort(X.begin(), X.end(), comp);
+    for (auto x: X) cout << x.second.second+1 << " ";
+    cout << endl;
 }  

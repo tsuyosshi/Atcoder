@@ -24,16 +24,18 @@ int N;
 
 signed main() {
     cin >> N;
-    int ans = 0;
-    map<string, int> mp;
+    vector<int> A(N);
+    vector<vector<int>> X(N+1);
     for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+        cin >> A[i];
+        X[A[i]].push_back(i);
+    }
+    int ans = 0;
+    for (int i = 1; i <= N; ++i) {
+        int cnt = X[i].size();
+        for (int j = 1; j < X[i].size(); ++j) {
+            ans += (X[i][j]-X[i][j-1]-1) * (cnt-j) * j;
+        } 
     }
     cout << ans << endl;
 }  

@@ -24,16 +24,22 @@ int N;
 
 signed main() {
     cin >> N;
-    int ans = 0;
-    map<string, int> mp;
-    for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+    vector<vector<int>> D(N, vector<int>(N));
+    for (int i = 0; i < N-1; ++i) {
+        for (int j = i+1; j < N; ++j) {
+            cin >> D[i][j];
+        }
     }
+    int ans = 0;
+    vector<int> dp(20000005, 0);
+    for (int i = 0; i < (1<<N); ++i) {
+        for (int u = 0; u < N-1; ++u) {
+            for (int v = u+1; v < N; ++v) {
+                if ((i&(1<<u)) || (i&(1<<v))) continue;
+                chmax(dp[i+(1<<u)+(1<<v)], dp[i]+D[u][v]);
+            }
+        }
+    }
+    for (int i = 0; i < (1<<N); ++i) chmax(ans, dp[i]);
     cout << ans << endl;
 }  

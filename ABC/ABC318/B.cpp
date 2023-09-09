@@ -24,16 +24,22 @@ int N;
 
 signed main() {
     cin >> N;
-    int ans = 0;
-    map<string, int> mp;
+    vector<vector<int>> F(101, vector<int>(101, 0));
     for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+        for (int y = c; y < d; ++y) {
+            for (int x = a; x < b; ++x) {
+                F[y][x] = 1;
+            }
+        }
+    }
+    int ans = 0;
+    for (int y = 0; y <=100; ++y) {
+        for (int x = 0; x <= 100; ++x) {
+            if (F[y][x] == 1) ans++;
+        }
     }
     cout << ans << endl;
+
 }  

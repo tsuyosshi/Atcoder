@@ -20,20 +20,29 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-int N;
+int N, K;
 
 signed main() {
-    cin >> N;
-    int ans = 0;
-    map<string, int> mp;
+    cin >> N >> K;
+    vector<PI> X;
+    int sum = 0;
+    int day = 1;
     for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+        int a, b;
+        cin >> a >> b;
+        X.push_back(PI(a, b));
+        sum += b;
     }
-    cout << ans << endl;
+    if (sum <= K) {
+        cout << 1 << endl;
+    }
+    else {
+        sort(X.begin(), X.end());
+        for (auto x: X) {
+            if (sum <= K) break;
+            day = x.first;
+            sum -= x.second;
+        }
+        cout << day + 1 << endl;
+    }
 }  

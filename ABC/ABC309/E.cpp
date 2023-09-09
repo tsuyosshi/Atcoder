@@ -20,20 +20,32 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-int N;
+int N, M;
+
+void dfs(int v, int remain, int &res, vector<vector<int>> &T, vector<int> &insurance) {
+    if (remain != 0 || insurance[v] != 0) res++;
+    for (auto u: T[v]) {
+        dfs(u, max(remain-1, insurance[v]), res, T, insurance);
+    }
+}
 
 signed main() {
-    cin >> N;
-    int ans = 0;
-    map<string, int> mp;
-    for (int i = 0; i < N; ++i) {
-        string s;
-        cin >> s;
-        string s_rev = s;
-        reverse(s_rev.begin(), s_rev.end());
-        if (mp[s] == 0 && mp[s_rev] == 0) ans++;
-        mp[s]++;
-        if (s != s_rev) mp[s_rev]++;
+    cin >> N >> M;
+    vector<vector<int>> T(N);
+    for (int i = 1; i < N; ++i) {
+        int p;
+        cin >> p;
+        p--;
+        T[p].push_back(i);
     }
-    cout << ans << endl;
+    vector<int> insurance(N, 0);
+    for (int i = 0; i < M; ++i) {
+        int x, y;
+        cin >> x >> y;
+        x--;
+        chmax(insurance[x], y);
+    }
+    int res = 0;
+    dfs(0, 0, res, T, insurance);
+    cout << res << endl;
 }  
