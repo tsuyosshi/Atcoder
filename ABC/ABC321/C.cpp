@@ -20,21 +20,19 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-map<string , int> mp = {{"tourist", 3858},
-{"ksun48", 3679},
-{"Benq", 3658},
-{"Um_nik", 3648},
-{"apiad", 3638},
-{"Stonefeang", 3630},
-{"ecnerwala", 3613},
-{"mnbvmar", 3555},
-{"newbiedmy", 3516},
-{"semiexp", 3481},
-};
+int K;
 
 signed main() {
-    string S;
-    cin >> S;
-    cout << mp[S] << endl;
-
+    cin >> K;
+    vector<int> numbers;
+    for (int bit = 0; bit < (1<<10); ++bit) {
+        string s;
+        for (int i = 9; i >= 0; --i) if (bit & (1<<i)) s.push_back('0'+i);
+        if (!s.empty()) {
+            int num = stoll(s);
+            numbers.push_back(num);
+        }
+    }
+    sort(numbers.begin(), numbers.end());
+    cout << numbers[K] << endl;
 }  

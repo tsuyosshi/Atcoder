@@ -20,21 +20,30 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-map<string , int> mp = {{"tourist", 3858},
-{"ksun48", 3679},
-{"Benq", 3658},
-{"Um_nik", 3648},
-{"apiad", 3638},
-{"Stonefeang", 3630},
-{"ecnerwala", 3613},
-{"mnbvmar", 3555},
-{"newbiedmy", 3516},
-{"semiexp", 3481},
-};
+int N;
+vector<int> X, Y;
 
 signed main() {
-    string S;
-    cin >> S;
-    cout << mp[S] << endl;
-
+    cin >> N;
+    X.resize(N);
+    Y.resize(N);
+    for (int i = 0; i < N; ++i) cin >> X[i] >> Y[i];
+    vector<vector<int>> dp(N+1, vector<int>(2, 0));
+    if (X[0] == 0) {
+        chmax(dp[0][0], Y[0]);
+    } else {
+        chmax(dp[0][1], Y[0]);
+    }
+    for (int i = 0; i < N-1; ++i) {
+        for (int j = 0; j < 2; ++j) {
+            chmax(dp[i+1][j], dp[i][j]);
+            if (X[i+1] == 0) {
+                chmax(dp[i+1][0], dp[i][j]+Y[i+1]);
+            } else {
+                if (j == 0) chmax(dp[i+1][1], dp[i][j]+Y[i+1]);
+            }
+        }
+    }
+    int ans = max(dp[N-1][0], dp[N-1][1]);
+    cout << ans << endl;
 }  

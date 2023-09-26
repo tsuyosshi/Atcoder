@@ -20,21 +20,30 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-map<string , int> mp = {{"tourist", 3858},
-{"ksun48", 3679},
-{"Benq", 3658},
-{"Um_nik", 3648},
-{"apiad", 3638},
-{"Stonefeang", 3630},
-{"ecnerwala", 3613},
-{"mnbvmar", 3555},
-{"newbiedmy", 3516},
-{"semiexp", 3481},
-};
+int M;
+vector<string> S(3);
 
 signed main() {
-    string S;
-    cin >> S;
-    cout << mp[S] << endl;
-
+    cin >> M;
+    for (int i = 0; i < 3; ++i) cin >> S[i];
+    int ans = INF;
+    vector<int> P = {0, 1, 2};
+    do {
+        string S1 = S[P[0]], S2 = S[P[1]], S3 = S[P[2]]; 
+        for (int i = 0; i <= 100; ++i) {
+            for (int j = 1; j <= 100; ++j) {
+                for (int k = 1; k <= 100; ++k) {
+                    char c1 = S1[i%M], c2 = S2[(i+j)%M], c3 = S3[(i+j+k)%M];
+                    if (c1 == c2 && c1 == c3) {
+                        chmin(ans, i+j+k);
+                    }
+                }
+            }
+        }
+    } while (next_permutation(P.begin(), P.end()));
+    if (ans != INF) {
+        cout << ans << endl;
+    } else {
+        cout << -1 << endl;
+    }
 }  

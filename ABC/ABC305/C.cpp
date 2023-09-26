@@ -20,21 +20,26 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-map<string , int> mp = {{"tourist", 3858},
-{"ksun48", 3679},
-{"Benq", 3658},
-{"Um_nik", 3648},
-{"apiad", 3638},
-{"Stonefeang", 3630},
-{"ecnerwala", 3613},
-{"mnbvmar", 3555},
-{"newbiedmy", 3516},
-{"semiexp", 3481},
-};
+int H, W;
 
 signed main() {
-    string S;
-    cin >> S;
-    cout << mp[S] << endl;
-
+    cin >> H >> W;
+    vector<string> S(H);
+    for (int i = 0; i < H; ++i) cin >> S[i];
+    for (int y = 0; y < H; ++y) {
+        for (int x = 0; x < W; ++x) {
+            if (S[y][x] == '.') {
+                int cnt = 0;
+                for (int i = 0; i < 4; ++i) {
+                    int nx = x + dx[i], ny = y + dy[i];
+                    if (nx < 0 || nx >= W || ny < 0 || ny >= H) continue;
+                    if (S[ny][nx] == '#') cnt++;
+                }
+                if (cnt > 1) {
+                    cout << y + 1 << " " << x + 1 << endl;
+                    return 0;
+                }
+            } 
+        }
+    }
 }  

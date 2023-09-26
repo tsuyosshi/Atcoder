@@ -20,21 +20,24 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-map<string , int> mp = {{"tourist", 3858},
-{"ksun48", 3679},
-{"Benq", 3658},
-{"Um_nik", 3648},
-{"apiad", 3638},
-{"Stonefeang", 3630},
-{"ecnerwala", 3613},
-{"mnbvmar", 3555},
-{"newbiedmy", 3516},
-{"semiexp", 3481},
-};
+int N, M, P;
+vector<int> A, B;
 
 signed main() {
-    string S;
-    cin >> S;
-    cout << mp[S] << endl;
-
+    cin >> N >> M >> P;
+    A.resize(N);
+    B.resize(M);
+    for (int i = 0; i < N; ++i) cin >> A[i];
+    for (int i = 0; i < M; ++i) cin >> B[i];
+    int ans = 0;
+    vector<int> S(M+1, 0);
+    sort(A.begin(), A.end());
+    sort(B.begin(), B.end());
+    for (int i = 1; i <= M; ++i) S[i] = S[i-1] + B[i-1];
+    for (int i = 0; i < N; ++i) {
+        int idx = lower_bound(B.begin(), B.end(), P-A[i]) - B.begin();
+        ans += P * (M-idx);
+        ans += idx*A[i] + S[idx];
+    }
+    cout << ans << endl;
 }  

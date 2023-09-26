@@ -20,21 +20,31 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
-map<string , int> mp = {{"tourist", 3858},
-{"ksun48", 3679},
-{"Benq", 3658},
-{"Um_nik", 3648},
-{"apiad", 3638},
-{"Stonefeang", 3630},
-{"ecnerwala", 3613},
-{"mnbvmar", 3555},
-{"newbiedmy", 3516},
-{"semiexp", 3481},
-};
+int N;
+string S;
 
 signed main() {
-    string S;
+    cin >> N;
     cin >> S;
-    cout << mp[S] << endl;
-
+    deque<int> L;
+    vector<PI> X;
+    for (int i = 0; i < N; ++i) {
+        if (S[i] == '(') {
+            L.push_back(i);
+        }
+        if (S[i] == ')' && L.size() > 0) {
+            int l = L.back();
+            L.pop_back();
+            X.push_back(PI(l, i));
+        } 
+    }
+    vector<int> deleted(N+1, 0);
+    for (auto x: X) {
+        deleted[x.first] += 1, deleted[x.second+1] -= 1;
+    }
+    for (int i = 1; i < N; ++i) {
+        deleted[i] += deleted[i-1];
+    }
+    for (int i = 0; i < N; ++i) if (deleted[i] == 0) cout << S[i];
+    cout << endl;
 }  
