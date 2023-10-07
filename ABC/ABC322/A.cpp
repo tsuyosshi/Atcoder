@@ -20,5 +20,17 @@ static const int ddy[8] = {0, 0, 1, -1, 1, -1, 1, -1};
 template<class T> inline bool chmin(T& a, T b) { if(a > b) { a = b; return true; } return false; }
 template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true; } return false; }
 
+int N;
+string S;
+
 signed main(){
+    cin >> N;
+    cin >> S;
+    for (int i = 0; i < N-2; ++i) {
+        if (S[i] == 'A' && S[i+1] == 'B' && S[i+2] == 'C') {
+            cout << i + 1 << endl;
+            return 0;
+        }
+    }
+    cout << -1 << endl;
 }

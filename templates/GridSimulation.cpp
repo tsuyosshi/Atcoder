@@ -68,44 +68,7 @@ bool same(int n, vector<string> &X, vector<string> &Y) {
     return true;
 }
 
-int N = 3, D = 4;
-vector<vector<string>> P(N, vector<string>(D));
-
-int cnt_all = 0;
-bool ok = false;
-
-void dfs(int n, vector<string> grid) {
-    if (n == N) {
-        vector<string> Y(D, "####");
-        int cnt = 0;
-        for (int i = 0; i < 4; ++i) for (int j = 0; j < 4; ++j) if (grid[i][j] == '#') cnt++;
-        if (same(D, grid, Y) && cnt == cnt_all) {
-            ok= true;
-        }
-    } else {
-        for (int y = -D; y < D; ++y) {
-            for (int x =-D; x < D; ++x) {
-                auto poly = P[n];
-                for (int i = 0; i < 4; ++i) {
-                    if (fillable(D, x, y, grid, poly)) {
-                        auto tmp = fill_grid(D, x, y, grid, poly);
-                        dfs(n+1, tmp);
-                    }
-                    poly = rot90(D, poly);
-                }
-            }
-        }
-    }
-} 
+// https://atcoder.jp/contests/abc322/submissions/46131711 参照
 
 signed main() {
-    for (int i = 0; i < 3; ++i) for (int j = 0; j < 4; ++j) cin >> P[i][j];
-    for (int i = 0; i < 3; ++i) for (int j = 0; j < 4; ++j) for (int k = 0; k < 4; ++k) if (P[i][j][k] == '#') cnt_all++;
-    vector<string> tmp = vector<string>(4, "....");
-    dfs(0, tmp);
-    if (ok) {
-        cout << "Yes" << endl;
-    } else {
-        cout << "No" << endl;
-    }
 }  

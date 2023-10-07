@@ -23,38 +23,42 @@ template<class T> inline bool chmax(T& a, T b) { if(a < b) { a = b; return true;
 int N;
 int X, Y;
 vector<int> P, T;
-map<int, int> mp;
+
+int L;
+int mem[840];
+
+int floori(int a, int b) {
+    if (a % b == 0) {
+        return a / b;
+    } else {
+        return a/b + 1;
+    }
+}
 
 int calc(int q) {
-    if (mp.find(q%8) != end(mp)) return mp[q%8];
-    int t = q;
-    cout << t << endl;
+    if (mem[q%L] != 0) return mem[q%L];
+    vector<int> dp(N+1, 0);
+    dp[0] = q + X;
     for (int i = 0; i < N-1; ++i) {
-        if (t % P[i] == 0) {
-            t += T[i];
-        } else {
-            int k = t/P[i] + 1;
-            t = k*P[i] + T[i];
-        }
-        cout << t << endl;
+        dp[i+1] = floori(dp[i], P[i])*P[i] + T[i];
     }
-    cout << "res: " << t - q << endl;
-    return mp[q%8] = t - q;
+    return mem[q%L] = dp[N-1] - q;
 }
 
 signed main() {
     cin >> N >> X >> Y;
     P.resize(N-1);
     T.resize(N-1);
-    for (int i = 0; i < N-1; ++i) cin >> P[i] >> T[i];
+    L = 1;
+    for (int i = 0; i < N-1; ++i) {
+        cin >> P[i] >> T[i];
+        L = lcm(L, P[i]);
+    }
     int Q;
     cin >> Q;
     while (Q--) {
         int q;
         cin >> q;
-        q += X;
-        q += calc(q);
-        q += Y;
-        cout << q << endl;
+        cout << calc(q) + q + Y << endl;
     }
-}  
+}                           
