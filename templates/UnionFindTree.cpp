@@ -33,8 +33,8 @@ public:
 
 	void init(int sz_) {
 		par.resize(sz_);
-		siz.resize(sz_,1);
-		for (int i=0;i<sz_;++i)par[i]=i;
+		siz.resize(sz_, 1);
+		for (int i = 0; i < sz_; ++i) par[i] = i;
 	}
 
 	int find(int x) {
